@@ -1,0 +1,374 @@
+/* =============================================================================
+   Expense & Budget Visualizer — styles.css
+   Requirements: 6.4, 7.1, 7.2, 2.2
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   1. Global Reset & Base
+   ----------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #1a1a1a; /* high-contrast dark text — exceeds WCAG AA 4.5:1 on #f5f5f5 */
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* -----------------------------------------------------------------------------
+   2. Page Layout — centered max-width container
+   ----------------------------------------------------------------------------- */
+
+body > *:not(#storage-warning) {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* -----------------------------------------------------------------------------
+   3. Storage Warning Banner (Requirement 5.4)
+   Non-blocking amber/yellow banner at the very top of the page.
+   ----------------------------------------------------------------------------- */
+
+#storage-warning {
+  /* Override the centered-container rule so the banner spans full width */
+  max-width: 100%;
+  width: 100%;
+  background-color: #fff3cd; /* amber tint — WCAG AA compliant with #5a4000 text */
+  color: #5a4000;
+  border-bottom: 2px solid #ffc107;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  /* display:block is the default; hidden attribute controls visibility */
+}
+
+/* When the hidden attribute is removed, the banner appears without blocking
+   any other element — it simply pushes content down. */
+
+/* -----------------------------------------------------------------------------
+   4. Balance Display (Requirements 7.1, 7.2)
+   Visually prominent, large, bold, high-contrast.
+   ----------------------------------------------------------------------------- */
+
+#balance-display {
+  font-size: 2.25rem;   /* ~36px — clearly dominant heading size */
+  font-weight: 700;
+  color: #1a1a1a;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  letter-spacing: -0.01em;
+}
+
+/* -----------------------------------------------------------------------------
+   5. Input Form (Requirement 1.1, 7.2)
+   Stacked label-above-input layout, full-width fields, visible focus states.
+   ----------------------------------------------------------------------------- */
+
+#expense-form {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 1.5rem 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 0.35rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #1a1a1a;
+  background-color: #ffffff;
+  border: 1.5px solid #b0b0b0;
+  border-radius: 5px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  appearance: auto; /* keep native select arrow */
+}
+
+/* Visible focus state — meets WCAG 2.4.7 */
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+}
+
+/* Submit button */
+#expense-form button[type="submit"] {
+  display: block;
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.65rem 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #2563eb; /* blue — 4.5:1+ contrast on white text */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#expense-form button[type="submit"]:hover {
+  background-color: #1d4ed8;
+}
+
+#expense-form button[type="submit"]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.4);
+}
+
+#expense-form button[type="submit"]:active {
+  background-color: #1e40af;
+}
+
+/* -----------------------------------------------------------------------------
+   6. Inline Error Messages (Requirement 1.3, 1.4)
+   Red text, small, displayed as block below the field.
+   ----------------------------------------------------------------------------- */
+
+span.error {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #b91c1c; /* red — 4.5:1+ contrast on white background */
+  min-height: 1em; /* reserve space so layout doesn't jump */
+}
+
+/* -----------------------------------------------------------------------------
+   7. Transaction List (Requirements 2.1, 2.2, 2.4, 2.5)
+   Scrollable container, flex row per item, delete button on the right.
+   ----------------------------------------------------------------------------- */
+
+/* Optional section heading rendered by JS */
+#transaction-list-section h2,
+h2.section-heading {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.75rem;
+}
+
+#transaction-list {
+  list-style: none;
+  padding: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  /* Subtle scrollbar styling for webkit browsers */
+  scrollbar-width: thin;
+  scrollbar-color: #b0b0b0 transparent;
+}
+
+#transaction-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+#transaction-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#transaction-list::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0;
+  border-radius: 3px;
+}
+
+/* Each transaction item */
+#transaction-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+}
+
+#transaction-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* Left-side info group (name, amount, category) */
+.transaction-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  flex: 1;
+  min-width: 0; /* allow text truncation */
+}
+
+.transaction-name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.transaction-amount {
+  color: #1a1a1a;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.transaction-category {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #4b5563; /* dark grey — 4.5:1+ on white */
+  background-color: #f3f4f6;
+  border-radius: 999px;
+  padding: 0.1rem 0.55rem;
+  white-space: nowrap;
+}
+
+/* Delete button — small danger style */
+.delete-btn {
+  flex-shrink: 0;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.8rem;
+  font-family: inherit;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #dc2626; /* red — 4.5:1+ on white text */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  white-space: nowrap;
+}
+
+.delete-btn:hover {
+  background-color: #b91c1c;
+}
+
+.delete-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.35);
+}
+
+.delete-btn:active {
+  background-color: #991b1b;
+}
+
+/* -----------------------------------------------------------------------------
+   8. Pie Chart (Requirement 4.1, 4.4)
+   Fixed reasonable size, centered.
+   ----------------------------------------------------------------------------- */
+
+.chart-container {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#expense-chart {
+  display: block;
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+}
+
+/* Chart.js CDN fallback message */
+#chart-fallback {
+  font-size: 0.9rem;
+  color: #4b5563;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* -----------------------------------------------------------------------------
+   9. Section Headings
+   Styled for "Transactions" and "Spending by Category" labels rendered by JS.
+   ----------------------------------------------------------------------------- */
+
+h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-bottom: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+/* -----------------------------------------------------------------------------
+   10. Utility — visually hidden (accessible hide)
+   ----------------------------------------------------------------------------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* -----------------------------------------------------------------------------
+   11. Responsive — narrow viewports
+   ----------------------------------------------------------------------------- */
+
+@media (max-width: 480px) {
+  #balance-display {
+    font-size: 1.75rem;
+  }
+
+  .transaction-name {
+    max-width: 120px;
+  }
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense &amp; Budget Visualizer</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+
+    <!-- Storage warning banner (shown when localStorage is unavailable) -->
+    <div id="storage-warning" hidden>
+      ⚠️ Local Storage is unavailable. Your data will not be saved between sessions.
+    </div>
+
+    <!-- Balance Display -->
+    <div id="balance-display">Total: $0.00</div>
+
+    <!-- Input Form -->
+    <form id="expense-form" novalidate>
+      <section class="form-group">
+        <label for="item-name">Item Name</label>
+        <input type="text" id="item-name" name="item-name" placeholder="e.g. Coffee" autocomplete="off" />
+        <span class="error" id="error-name"></span>
+      </section>
+
+      <section class="form-group">
+        <label for="item-amount">Amount ($)</label>
+        <input type="number" id="item-amount" name="item-amount" placeholder="0.00" min="0.01" step="0.01" />
+        <span class="error" id="error-amount"></span>
+      </section>
+
+      <section class="form-group">
+        <label for="item-category">Category</label>
+        <select id="item-category" name="item-category">
+          <option value="">-- Select a category --</option>
+          <option value="Food">Food</option>
+          <option value="Transport">Transport</option>
+          <option value="Fun">Fun</option>
+        </select>
+        <span class="error" id="error-category"></span>
+      </section>
+
+      <button type="submit">Add Expense</button>
+    </form>
+
+    <!-- Transaction List -->
+    <ul id="transaction-list"></ul>
+
+    <!-- Pie Chart -->
+    <div class="chart-container">
+      <canvas id="expense-chart"></canvas>
+      <p id="chart-fallback" hidden>Chart unavailable — could not load Chart.js.</p>
+    </div>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- App logic -->
+    <script src="js/app.js" defer></script>
+  </body>
+</html>
